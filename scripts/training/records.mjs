@@ -28,7 +28,10 @@ const LAB_RECORDS = [
     fields: ["External_Id__c", "Crew_Type__c", "Roof_Type__c", "Panels_Per_Day__c"],
     file: "scripts/lab-records/lab-2-4/Crew_Capacity__c.csv",
     org: "helios-dev",
-    missingHint: "Create the Crew Capacity object and its four fields first: Lab 2.4, step 1."
+    missingHint: "Create the Crew Capacity object and its four fields first: Lab 2.4, step 1. If you did, give Read and Edit on them in the Helios Delivery Manager permission set, as step 1 says.",
+    externalIdHint: "In Setup, Object Manager > Crew Capacity > Fields & Relationships > External Id: click Edit, tick External Id, save, then run this again. Retrieve the field afterwards, so that your branch has it too.",
+    accessHint: "Give Read and Edit on the four fields in the Helios Delivery Manager permission set (Lab 2.4, step 1), then run this again.",
+    failedHint: "The Salesforce error is just above. The usual causes: External_Id__c is not marked External Id, or the Helios Delivery Manager permission set does not give Edit on the four fields (Lab 2.4, step 1)."
   }
 ];
 
@@ -54,13 +57,22 @@ export default async function records(args) {
   // before that fails on every row, with an error that names none of it
   title(`1 of 3  Checking that ${entry.objectLabel} is in ${target}`);
   const describe = runJson("sf", ["sobject", "describe", "--sobject", entry.object, "--target-org", target, "--json"]);
-  const present = new Set(((describe && describe.result && describe.result.fields) || []).map((f) => f.name));
-  if (present.size === 0) {
+  const described = new Map(((describe && describe.result && describe.result.fields) || []).map((f) => [f.name, f]));
+  if (described.size === 0) {
     abort(`There is no ${entry.objectLabel} object in ${target} yet.`, entry.missingHint);
   }
-  const missing = entry.fields.filter((f) => !present.has(f));
+  const missing = entry.fields.filter((f) => !described.has(f));
   if (missing.length > 0) {
     abort(`${entry.objectLabel} in ${target} has no ${missing.join(", ")} field yet.`, entry.missingHint);
+  }
+  // The upsert matches on the external id: a field without the External Id
+  // box ticked fails every row, with an error that does not say which box
+  if (described.get(entry.externalId).externalId !== true) {
+    abort(`${entry.externalId} in ${target} is not marked External Id.`, entry.externalIdHint);
+  }
+  const readOnly = entry.fields.filter((f) => !(described.get(f).createable && described.get(f).updateable));
+  if (readOnly.length > 0) {
+    abort(`You cannot edit ${readOnly.join(", ")} in ${target}.`, entry.accessHint);
   }
   ok(`${entry.objectLabel} and its fields are there`);
 
@@ -88,10 +100,7 @@ export default async function records(args) {
   );
   if (load.code !== 0) {
     info(c.dim(`${load.stderr || load.stdout}`.trim().split(/\r?\n/).slice(-8).join("\n")));
-    abort(
-      `The records could not be created in ${target}.`,
-      "The most common cause is a field you cannot edit: check that the four fields are visible to your profile, then run this again."
-    );
+    abort(`The records could not be created in ${target}.`, entry.failedHint);
   }
   ok("Records created");
   if (ensureAllListView(target, entry)) {

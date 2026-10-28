@@ -95,6 +95,9 @@ jobs:
       - name: The translate widget keeps the page
         run: node scripts/verify/check-language-switch.mjs
 
+      # Guinea Run, the game hidden in the course, is checked by guinea-run.yml:
+      # it plays every world for about 45 minutes, which never holds up a deploy.
+
       # The host the course is served from. This runs before the Pages artifact
       # is uploaded on purpose: a failure here stops the old URL from publishing
       # redirects to a copy that was never updated.

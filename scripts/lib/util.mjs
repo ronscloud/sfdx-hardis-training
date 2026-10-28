@@ -725,6 +725,9 @@ async function ghWebFlow(args, terminalHint) {
  *
  * Signing in happens here rather than in a message telling somebody to type a
  * command: this course never sends anybody to a terminal.
+ *
+ * Returns true when the learner signed in just now, so the account is the one
+ * they picked a second ago, and false when gh already held one.
  */
 export async function ensureGh() {
   if (!hasGh()) {
@@ -738,7 +741,7 @@ export async function ensureGh() {
   }
   if (ghSignedIn()) {
     await ensureGhScopes();
-    return;
+    return false;
   }
 
   info("");
@@ -755,6 +758,127 @@ export async function ensureGh() {
   // which is not something a Source Control panel can answer.
   run("gh", ["auth", "setup-git", "--hostname", "github.com"], { capture: true, quiet: true });
   ok("Signed in to GitHub.");
+  return true;
+}
+
+/**
+ * The GitHub account the fork is about to go to, confirmed before it is made.
+ *
+ * gh forks into the account it is signed in as, and it keeps a sign-in for a
+ * year. A learner on a machine that still holds a former employer's account, or
+ * a work account next to their own, would get the fork in the wrong place
+ * without a word: VS Code and git may show another name, gh does not care.
+ * So the question names the account, and offers the others gh holds.
+ *
+ * `preselected` is the --account flag: one of the accounts gh holds, which is
+ * switched to when it is not the active one. Without a terminal or a panel to
+ * ask in, and with --yes, the active account is kept and said, the way the
+ * other questions of this command take their default.
+ *
+ * Returns false when the learner chose to stop, true otherwise.
+ */
+export async function confirmGhAccount(preselected, { assumeYes = false } = {}) {
+  const accounts = ghAccounts();
+  const active = accounts.find((one) => one.active);
+  if (!active) {
+    // gh is signed in, since ensureGh came first, but in a shape this does not
+    // read: an older gh, or a host it words differently. Nothing to offer.
+    return true;
+  }
+  if (!preselected && (assumeYes || !isInteractive())) {
+    if (panelGone()) {
+      abortPanelGone("Which GitHub account should the fork go to?");
+    }
+    info(`The fork goes to the GitHub account ${c.bold(active.login)}. Another one: pass --account <login>.`);
+    return true;
+  }
+
+  // A token from GH_TOKEN or GITHUB_TOKEN is not something gh can switch away
+  // from, nor sign in next to: only keeping it or stopping make sense.
+  const fromVariable = /TOKEN/.test(active.source || "");
+  const others = fromVariable ? [] : accounts.filter((one) => !one.active);
+  const choices = [
+    { value: active.login, label: `Yes, use ${active.login}`, hint: fromVariable ? `the account of ${active.source}` : undefined },
+    ...others.map((one) => ({ value: one.login, label: `Use ${one.login} instead`, hint: "another account gh is signed in to" })),
+    ...(fromVariable ? [] : [{ value: ANOTHER_ACCOUNT, label: "Sign in with another GitHub account" }]),
+    { value: STOP, label: "Stop, nothing is changed" }
+  ];
+  const picked = await select(`Fork the course into the GitHub account ${active.login}?`, choices, preselected, "account");
+  if (picked === STOP) {
+    return false;
+  }
+  if (picked === active.login) {
+    return true;
+  }
+  if (picked === ANOTHER_ACCOUNT) {
+    info("");
+    info("In the browser, sign in to GitHub with the account you want the fork in.");
+    info(c.dim("    If GitHub opens on the other account, sign out of it there first."));
+    const code = await ghAuthLogin();
+    if (code !== 0 || !ghSignedIn()) {
+      abort(
+        "The GitHub sign-in did not finish.",
+        "Click the command again: a new code is given, and the sign-in starts over."
+      );
+    }
+  } else {
+    const switched = run("gh", ["auth", "switch", "--hostname", "github.com", "--user", picked], { capture: true, quiet: true });
+    if (switched.code !== 0) {
+      abort(
+        `gh could not switch to ${picked}.`,
+        "Click the command again and pick Sign in with another GitHub account."
+      );
+    }
+    await ensureGhScopes();
+  }
+  // git asks gh for its credentials, so it follows the account picked here
+  run("gh", ["auth", "setup-git", "--hostname", "github.com"], { capture: true, quiet: true });
+  ok("GitHub account changed.");
+  return true;
+}
+
+/**
+ * Reads the accounts out of `gh auth status`, which has no JSON output on the
+ * versions learners have. Since gh 2.40 it prints one block per account:
+ *
+ *   ✓ Logged in to github.com account octocat (keyring)
+ *   - Active account: true
+ *
+ * and before that one line, for the only account: "Logged in to github.com as
+ * octocat (...)". An account whose token gh could not use is left out: it can
+ * neither be forked into nor switched to.
+ */
+export function parseGhAccounts(text) {
+  const accounts = [];
+  // The account the next "Active account" line is about, none after a failed one
+  let current = null;
+  for (const line of String(text).split(/\r?\n/)) {
+    if (/Failed to log in to github\.com/i.test(line)) {
+      current = null;
+      continue;
+    }
+    const login = line.match(/Logged in to github\.com (?:account|as) ([A-Za-z0-9-]+)(?: \(([^)]*)\))?/);
+    if (login) {
+      current = { login: login[1], source: login[2] || "", active: !/ account /.test(line) };
+      accounts.push(current);
+      continue;
+    }
+    const activeLine = line.match(/Active account:\s*(true|false)/i);
+    if (activeLine && current) {
+      current.active = activeLine[1].toLowerCase() === "true";
+    }
+  }
+  return accounts;
+}
+
+/** Two answers of the account question that are not account names. */
+const ANOTHER_ACCOUNT = "another-account";
+const STOP = "stop";
+
+/** The github.com accounts gh holds, the active one marked. */
+function ghAccounts() {
+  const res = run("gh", ["auth", "status", "--hostname", "github.com"], { capture: true, quiet: true });
+  return parseGhAccounts(`${res.stdout}\n${res.stderr}`);
 }
 
 /**

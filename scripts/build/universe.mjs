@@ -407,6 +407,7 @@ function nav() {
     lines.push(`  - ${labels.help}: ${locale}/help.md`);
     // The backlog, the badges and the statistics are generated pages, one per language, and the
     // site language keeps the paths the outside world already holds
+    // The Hall of Fame page is built too, but stays out of the menu: it is reached by its address
     const prefix = locale === "en" ? "" : `${locale}/`;
     lines.push(`  - ${labels.backlog}: ${prefix}BACKLOG.md`);
     lines.push(`  - ${labels.badges}: ${prefix}badges/index.md`);
