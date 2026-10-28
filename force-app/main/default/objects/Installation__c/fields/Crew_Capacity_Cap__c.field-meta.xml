@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Crew_Capacity_Cap__c</fullName>
-    <description>The largest crew this installation can take. Above it, people get in each other's way on the roof.</description>
+    <description>The largest crew this installation can take. Above it, people get in each other&apos;s way on the roof.</description>
     <externalId>false</externalId>
     <label>Crew Capacity Cap</label>
     <precision>2</precision>
