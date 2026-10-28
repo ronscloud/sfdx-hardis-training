@@ -19,6 +19,7 @@
         <members>Crew_Capacity__c.Panels_Per_Day__c</members>
         <members>Crew_Capacity__c.Roof_Type__c</members>
         <members>Installation__c.Account__c</members>
+        <members>Installation__c.Crew_Capacity_Cap__c</members>
         <members>Installation__c.Crew_Notes__c</members>
         <members>Installation__c.Crew_Size__c</members>
         <members>Installation__c.Crew_Warning_Sent__c</members>
