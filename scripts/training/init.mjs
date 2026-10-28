@@ -40,7 +40,7 @@ import os from "os";
 import path from "path";
 import {
   ROOT, c, title, info, ok, warn, abort, run, runAsync, runJson, parseJsonOutput, git, gitOut,
-  select, confirm, connectedOrgs, orgChoices, universe, ensureGh, repoSlug, openUrl, removeTempDir,
+  select, confirm, connectedOrgs, orgChoices, universe, ensureGh, confirmGhAccount, repoSlug, openUrl, removeTempDir,
   readProgress, writeProgress
 } from "../lib/util.mjs";
 import { deployAppToAll, grantManager, loadData, recordSeeded, alreadySeeded, workInEnglish } from "./seed.mjs";
@@ -945,7 +945,18 @@ export default async function init(args) {
   info(c.dim("already there, and nobody asks a new contributor to build them on their first day."));
   info("");
 
-  await ensureGh();
+  const signedInNow = await ensureGh();
+  // Before anything reads the account: the fork, and the name of the commits.
+  // Only while there is no fork yet: once origin is the fork, it is in the
+  // account it is in, and asking again would only make a learner doubt it.
+  const slugBefore = repoSlug();
+  const forkMade = slugBefore && slugBefore.toLowerCase() !== UPSTREAM.toLowerCase();
+  if (!forkMade && !signedInNow) {
+    if (!(await confirmGhAccount(args.account, { assumeYes: args.yes === true }))) {
+      info("Nothing was changed. Click Set up my training environment again when you know which account to use.");
+      return;
+    }
+  }
   const handle = currentHandle();
   if (!handle) {
     abort("Could not read your GitHub account.", "Click Set up my training environment again.");

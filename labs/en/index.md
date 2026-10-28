@@ -31,9 +31,9 @@ Pull Request to production.*
 
 | Level                                                                 | Who it is for                                                    | Time   | Before you start   | You finish able to                                                                                  |
 |-----------------------------------------------------------------------|------------------------------------------------------------------|--------|--------------------|-----------------------------------------------------------------------------------------------------|
-| [**1 - Contributor basics**](level-1-contributor-basics/index.md)     | Admins and developers joining a team that already has a pipeline | 2 h 15 | Nothing            | Take a User Story, build it, publish it, get a green Pull Request, merge it                         |
-| [**2 - Contributor advanced**](level-2-contributor-advanced/index.md) | The same people, once the easy stories are behind them           | 4 h 30 | Level 1            | Solve deployment errors, declare deployment actions, handle overwrites, resolve conflicts           |
-| [**3 - Release Manager**](level-3-release-manager/index.md)           | The person who owns the pipeline, the orgs and the releases      | 9 h 30 | Levels 1 **and** 2 | Take over an org with no pipeline, review and merge, release to UAT and production, hotfix, monitor |
+| [**1 - Contributor basics**](level-1-contributor-basics/index.md)     | Admins and developers joining a team that already has a pipeline | 2 h    | Nothing            | Take a User Story, build it, publish it, get a green Pull Request, merge it                         |
+| [**2 - Contributor advanced**](level-2-contributor-advanced/index.md) | The same people, once the easy stories are behind them           | 5 h 30 | Level 1            | Solve deployment errors, declare deployment actions, handle overwrites, resolve conflicts           |
+| [**3 - Release Manager**](level-3-release-manager/index.md)           | The person who owns the pipeline, the orgs and the releases      | 8 h 30 | Levels 1 **and** 2 | Take over an org with no pipeline, review and merge, release to UAT and production, hotfix, monitor |
 
 Levels 1 and 2 are both the contributor path, and they are for **admins and developers alike**. You
 do not need to know Git, the Salesforce CLI or DevOps: every step is a click in VS Code or on
@@ -55,8 +55,8 @@ conflicts and deployment actions. Someone who has never solved one cannot review
   one download at a time, with screenshots. Nothing to install, or not allowed to?
   [Agentforce Vibes](https://www.salesforce.com/agentforce/developers/vibe-coding/ide/) is VS Code in a browser tab,
   launched from a developer sandbox or from the free Developer Edition org Lab 1.2 signs you up
-  for, and the course runs there too, as it does in
-  [Cursor](https://cursor.com/) and the other editors built on VS Code.
+  for, and the course runs there too, as it does in [Cursor](https://cursor.com/). Follow it in
+  VS Code, Agentforce Vibes or Cursor, and keep the same one from start to finish.
 - A [GitHub](https://github.com/) account, free.
 - One free [Salesforce Developer Edition org](https://developer.salesforce.com/signup) to start
   with, and one more at Level 3. Lab 1.2 signs you up, and creates the other orgs the course

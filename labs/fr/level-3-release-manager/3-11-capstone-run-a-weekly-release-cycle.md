@@ -5,7 +5,7 @@ description: "Menez une semaine entière de release manager Salesforce sans pas-
 level: 3
 lab: 11
 lang: fr
-source_rev: "8e5740dac524264cdace81a72c7c7e0ef381d29b"
+source_rev: "1ef2d067c4f0d48023590c43c37df730e45afd47"
 screenshots:
   - annotated/web/github-star-vscode-sfdx-hardis
   - annotated/vscode/welcome-custom-menu-3
@@ -21,7 +21,7 @@ depends_on:
 
 **Niveau** : 3 Release Manager
 
-**Durée** : ~50 min<!-- observed --> (observé : médiane 54 min, 5 participants, le plus rapide 20 min)<!-- /observed -->
+**Durée** : ~50 min<!-- observed --> (observé : médiane 54 min, 9 participants, le plus rapide 20 min)<!-- /observed -->
 
 **Vous allez** : faire une semaine entière d'une traite, sans pas-à-pas, et finir avec quelque chose
 que vous pourriez montrer à quelqu'un.
@@ -40,12 +40,12 @@ vous dire dans quel ordre faire les choses.
 
 ### Lundi : recevoir ce que les contributeurs vous ont envoyé
 
-Deux Pull Requests attendent. **US-020**, ouverte depuis le [Lab 3.4](3-4-merge-colliding-pull-requests.md) et toujours en échec. Et une
+Deux Pull Requests attendent. US-020, ouverte depuis le [Lab 3.4](3-4-merge-colliding-pull-requests.md) et toujours en échec. Et une
 nouvelle de Romain : **Training: Level 3** > **Simulate my teammates**, et choisissez
 **US-055 Install Date says which day it means**.
 
-Deux autres choses attendent, et pas dans une Pull Request : **US-058**, la durée de garantie, et
-**US-060**, le signal d'échafaudage, posées dans `uat` depuis le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md) parce que la
+Deux autres choses attendent, et pas dans une Pull Request : US-058, la durée de garantie, et
+US-060, le signal d'échafaudage, posées dans `uat` depuis le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md) parce que la
 promotion branch est passée à côté. La formulation a été validée pendant le week-end et les équipes
 ont été informées lundi. Rien à en faire aujourd'hui, et c'est jeudi que cela compte.
 
@@ -70,7 +70,7 @@ qu'il a envoyé et ce qu'il a sauté, et vérifiez l'org ensuite.
 ### Mercredi : promouvoir en UAT
 
 Créez la promotion d'`integration` vers `uat`. Lisez les deployment actions qu'elle transporte
-**avant** de merger, et faites les étapes manuelles ensuite.
+avant de merger, et faites les étapes manuelles ensuite.
 
 Vérifiez dans `helios-uat` que les stories sont utilisables, pas seulement déployées.
 
@@ -86,7 +86,7 @@ le redéplacer. Lisez la ligne **Metadata** avec cela en tête : ce qui sort cet
 text de Romain, les retrofits qui remontent depuis `integration`, et US-058 et US-060, qui attendent
 dans `uat` depuis le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md). Un compteur `deleted` dans cette ligne reste ce sur quoi s'arrêter.
 
-**Cette promotion est aussi ce qui met fin à l'exception.** US-057, US-059 et US-061 sont parties
+Cette promotion est aussi ce qui met fin à l'exception. US-057, US-059 et US-061 sont parties
 seules vers `preprod` la semaine dernière ; celle-ci transporte US-058 et US-060 de manière
 ordinaire, et `uat` et `preprod` contiennent de nouveau la même chose. Elle merge sans conflit parce
 que l'étape 9 du [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md) a retrofité la promotion dans `integration` le jour même : les
@@ -124,7 +124,7 @@ successeur :
 ## Ce qui fait de ceci l'épreuve finale
 
 Rien ici n'est nouveau. Chaque étape est un lab que vous avez fait. Ce qui est nouveau, c'est que
-**personne ne vous a dit l'ordre**, et l'ordre est le métier.
+personne ne vous a dit l'ordre, et l'ordre est le métier.
 
 Trois décisions que vous avez dû prendre sans qu'un lab vous le dise :
 
@@ -189,7 +189,7 @@ Onze contrôles.
 
 Welcome page > **Training: Level 3** > **Claim my badge**.
 
-Une demande de Niveau 3 rejoue **d'abord les audits des Niveaux 1 et 2**. C'est ainsi que le
+Une demande de Niveau 3 rejoue d'abord les audits des Niveaux 1 et 2. C'est ainsi que le
 prérequis est imposé, parce qu'un Trailmix ne peut rien conditionner. La commande lance ces mêmes
 audits sur votre machine avant d'ouvrir quoi que ce soit : vous l'apprenez donc ici plutôt que sur
 l'issue.
@@ -199,6 +199,8 @@ dernière partie de l'adresse de votre profil Trailhead, et ouvre le formulaire 
 rempli. Choisissez votre niveau dans la liste **Level**, qu'un lien ne peut pas pré-remplir, puis
 cochez les trois cases et soumettez.
 
+Le badge s'appelle **sfdx-hardis Release Manager**.
+
 !!! tip "Si ce cours vous a servi"
     [hardisgroupcom/vscode-sfdx-hardis](https://github.com/hardisgroupcom/vscode-sfdx-hardis) est
     l'extension par laquelle est passé chaque clic de ce cours. Une étoile est ce qui permet à un
@@ -206,8 +208,6 @@ cochez les trois cases et soumettez.
     nom du repository. Donnez une étoile si vous avez aimé ce cours !
 
     ![Le bouton Star du repository vscode-sfdx-hardis sur GitHub](../../_assets/annotated/web/github-star-vscode-sfdx-hardis.png)
-
-Le badge s'appelle **sfdx-hardis Release Manager**.
 
 !!! tip "La mettre en bannière LinkedIn"
     [Trailhead Banner](https://thb.nabondance.me/) dessine une image de couverture LinkedIn à partir
@@ -219,12 +219,12 @@ Le badge s'appelle **sfdx-hardis Release Manager**.
 
 Trois choses à faire dans la semaine qui suit, par ordre d'utilité :
 
-**Un : emportez la checklist d'installation vers votre propre projet.** La
+Un : emportez la checklist d'installation vers votre propre projet. La
 [checklist d'installation](https://sfdx-hardis.cloudity.com/salesforce-devops-setup-checklist/) est
 la liste de tout ce dont une vraie pipeline a besoin. Vous en avez maintenant fait l'essentiel une
 fois. Parcourez-la sur le projet où vous travaillez réellement et comptez ce qui manque.
 
-**Deux : supprimez vos orgs de formation, ou gardez-les délibérément.** Les scratch orgs se
+Deux : supprimez vos orgs de formation, ou gardez-les délibérément. Les scratch orgs se
 suppriment toutes seules au bout de 30 jours. Les deux orgs Developer Edition qui contiennent une
 entreprise solaire fictive peuvent très bien rester comme terrain d'essai, et `helios-prod` reste un
 Dev Hub d'où créer des scratch orgs. Si vous les gardez, supprimez les secrets
@@ -232,8 +232,14 @@ Dev Hub d'où créer des scratch orgs. Si vous les gardez, supprimez les secrets
 certificats JWT de votre fork (votre copie personnelle du repository du cours sur GitHub, par
 exemple `github.com/my-username/sfdx-hardis-training`) sont de vrais identifiants vers de vraies
 orgs.
+Le job nocturne de capacité des équipes du [Lab 2.4](../level-2-contributor-advanced/2-4-ship-reference-data-and-a-batch-with-deployment-actions.md) continue de tourner dans chaque org où il a été
+planifié, et vous envoie un résumé par email chaque nuit.
+**Training: Level 3** > **Clean up a training org** l'arrête, et retire l'app Helios et ses données
+de l'org choisie. Pour garder Helios et
+ne perdre que l'email, ouvrez **Setup** > **Scheduled Jobs** dans l'org et cliquez sur **Del** sur la
+ligne du job, `Helios crew capacity nightly` si vous avez gardé le nom du lab.
 
-**Trois : gardez les promotion branches comme exception.** Le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md) vous en a fait
+Trois : gardez les promotion branches comme exception. Le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md) vous en a fait
 assembler une, et cette semaine a remis la pipeline en place. Sur un vrai projet la pression va dans
 l'autre sens : le premier sous-ensemble est accepté pour une bonne raison, le deuxième parce que le
 premier a marché, et au bout d'un trimestre plus personne ne sait ce que contient chaque org. Si vous
