@@ -1,0 +1,16 @@
+{
+  "sfdxHardisLabel": "Handover Item Reference Data",
+  "sfdxHardisDescription": "10 records for the challenge",
+  "objects": [
+    {
+      "query": "SELECT Id, Name,External_Id__c,Installation__c,Is_Done__c,Is_Template__c,Label__c,Sequence__c FROM HandOver_Item__c",
+      "operation": "Upsert",
+      "externalId": "External_Id__c",
+      "master": true,
+      "deleteOldData": false,
+      "useQueryAll": false,
+      "allOrNone": true,
+      "updateWithMockData": false
+    }
+  ]
+}
