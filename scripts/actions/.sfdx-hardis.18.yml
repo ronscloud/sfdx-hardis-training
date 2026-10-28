@@ -1,0 +1,9 @@
+commandsPostDeploy:
+  - id: c7a64c74-9cc6-40f5-806a-d642a79d2ecf
+    label: Load Handover Item reference data
+    type: data
+    command: ""
+    parameters:
+      sfdmuProject: HandoverItemRefData
+    runOnlyOnceByOrg: true
+    context: process-deployment-only
