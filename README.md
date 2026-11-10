@@ -225,3 +225,7 @@ Built by [Cloudity](https://cloudity.com) and friends, alongside
 
 Helios Energy, its people and its backlog are fiction. Any resemblance to a real solar installer is
 a coincidence.
+
+<!-- workflow-trigger:start -->
+<!-- Training setup: a push is what starts the workflows of a fork. 2026-11-10T23:53:45Z -->
+<!-- workflow-trigger:end -->
